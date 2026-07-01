@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">HeroAssistant</string>
+    <string name="dashboard_title">Painel</string>
+    <string name="battery">Bateria</string>
+    <string name="storage">Armazenamento</string>
+    <string name="data_usage">Dados móveis</string>
+    <string name="scan_now">Escanear dispositivo</string>
+    <string name="clean_cache">Limpar cache</string>
+    <string name="remove_bloatware">Remover bloatware</string>
+    <string name="schedule_clean">Agendar limpeza</string>
+    <string name="reports">Relatórios</string>
+    <string name="shizuku_active">Shizuku ativo</string>
+    <string name="shizuku_inactive">Shizuku inativo</string>
+</resources>

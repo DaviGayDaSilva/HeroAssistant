@@ -1,0 +1,14 @@
+{
+  "known_bloatware": [
+    "com.facebook.katana",
+    "com.facebook.orca",
+    "com.microsoft.skydrive",
+    "com.microsoft.office.outlook",
+    "com.samsung.android.bixby.agent",
+    "com.samsung.android.bixby.wakeup",
+    "com.google.android.apps.maps",
+    "com.google.android.apps.photos",
+    "com.google.android.gm",
+    "com.android.chrome"
+  ]
+}
