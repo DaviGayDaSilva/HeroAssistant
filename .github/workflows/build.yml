@@ -38,17 +38,11 @@ jobs:
       - name: Compilar APK Debug
         run: ./gradlew assembleDebug --stacktrace
 
-      - name: Localizar APK
-        id: find-apk
-        run: |
-          APK_PATH=$(find . -name "*.apk" -path "*/debug/*" -type f | head -1)
-          echo "apk_path=$APK_PATH" >> $GITHUB_OUTPUT
-
       - name: Upload APK Debug
         uses: actions/upload-artifact@v4
         with:
           name: HeroAssistant-Debug
-          path: ${{ steps.find-apk.outputs.apk_path }}
+          path: app/build/outputs/apk/debug/app-debug.apk
 
       - name: Criar Release no GitHub
         if: github.event_name == 'push' && github.ref == 'refs/heads/main'
@@ -64,8 +58,8 @@ jobs:
             ### Requisitos
             - Android 8.0 (API 26) ou superior
             - Shizuku instalado para recursos avançados
-          files: ${{ steps.find-apk.outputs.apk_path }}
+          files: app/build/outputs/apk/debug/app-debug.apk
           draft: false
           prerelease: false
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}.
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
