@@ -7,6 +7,9 @@ on:
     branches: [ main ]
   workflow_dispatch:
 
+permissions:
+  contents: write
+
 jobs:
   build:
     name: Compilar e Lançar Release
@@ -35,46 +38,32 @@ jobs:
       - name: Compilar APK Debug
         run: ./gradlew assembleDebug
 
-      - name: Compilar APK Release
-        run: ./gradlew assembleRelease
+      - name: Copiar APKs para raiz
+        run: |
+          cp app/build/outputs/apk/debug/app-debug.apk HeroAssistant-debug.apk
+          ls -la *.apk
 
       - name: Upload APK Debug
         uses: actions/upload-artifact@v4
         with:
           name: HeroAssistant-Debug
-          path: app/build/outputs/apk/debug/app-debug.apk
-
-      - name: Upload APK Release
-        uses: actions/upload-artifact@v4
-        with:
-          name: HeroAssistant-Release
-          path: app/build/outputs/apk/release/app-release-unsigned.apk
+          path: HeroAssistant-debug.apk
 
       - name: Criar Release no GitHub
         if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-        uses: softprops/action-gh-release@v1
+        uses: softprops/action-gh-release@v2
         with:
           tag_name: v1.0.${{ github.run_number }}
           name: HeroAssistant v1.0.${{ github.run_number }}
           body: |
-            ## 🚀 HeroAssistant
-            
+            ## HeroAssistant
+
             Build automático gerado pelo GitHub Actions.
-            
-            ### 📱 APKs Disponíveis
-            - **HeroAssistant-Debug**: versão de desenvolvimento
-            - **HeroAssistant-Release**: versão de produção
-            
-            ### ⚙️ Requisitos
+
+            ### Requisitos
             - Android 8.0 (API 26) ou superior
             - Shizuku instalado para recursos avançados
-            
-            ### 📝 Notas
-            - Release não assinada (instalar via ADB ou permitir fontes desconhecidas)
-            - Debug assinada com chave de desenvolvimento
-          files: |
-            app/build/outputs/apk/debug/app-debug.apk
-            app/build/outputs/apk/release/app-release-unsigned.apk
+          files: HeroAssistant-debug.apk
           draft: false
           prerelease: false
         env:
