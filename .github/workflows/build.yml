@@ -35,8 +35,30 @@ jobs:
       - name: Dar permissão ao Gradle Wrapper
         run: chmod +x gradlew
 
+      - name: Debug - Listar arquivos do projeto
+        run: |
+          echo "=== Arquivos Kotlin ==="
+          find . -name "*.kt" -type f
+          echo ""
+          echo "=== Estrutura do app ==="
+          ls -la app/
+          echo ""
+          echo "=== AndroidManifest ==="
+          cat app/src/main/AndroidManifest.xml
+          echo ""
+          echo "=== Build Gradle do app ==="
+          cat app/build.gradle.kts
+
       - name: Compilar APK Debug
-        run: ./gradlew assembleDebug --stacktrace
+        run: ./gradlew assembleDebug --stacktrace --info
+
+      - name: Verificar APK gerado
+        run: |
+          echo "=== Procurando APKs ==="
+          find . -name "*.apk" -type f
+          echo ""
+          echo "=== Tamanho dos diretórios de build ==="
+          du -sh app/build/ 2>/dev/null || echo "Pasta build não existe"
 
       - name: Upload APK Debug
         uses: actions/upload-artifact@v4
