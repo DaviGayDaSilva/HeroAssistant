@@ -35,38 +35,19 @@ jobs:
       - name: Dar permissão ao Gradle Wrapper
         run: chmod +x gradlew
 
-      - name: Debug - Listar arquivos do projeto
-        run: |
-          echo "=== Arquivos Kotlin ==="
-          find . -name "*.kt" -type f
-          echo ""
-          echo "=== Estrutura do app ==="
-          ls -la app/
-          echo ""
-          echo "=== AndroidManifest ==="
-          cat app/src/main/AndroidManifest.xml
-          echo ""
-          echo "=== Build Gradle do app ==="
-          cat app/build.gradle.kts
-
       - name: Compilar APK Debug
-        run: ./gradlew assembleDebug --stacktrace --info
+        run: ./gradlew assembleDebug --stacktrace
 
-      - name: Verificar APK gerado
-        run: |
-          echo "=== Procurando APKs ==="
-          find . -name "*.apk" -type f
-          echo ""
-          echo "=== Tamanho dos diretórios de build ==="
-          du -sh app/build/ 2>/dev/null || echo "Pasta build não existe"
+      - name: Mover APK
+        run: mv app/build/outputs/apk/debug/app-debug.apk HeroAssistant.apk
 
-      - name: Upload APK Debug
+      - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
-          name: HeroAssistant-Debug
-          path: app/build/outputs/apk/debug/app-debug.apk
+          name: HeroAssistant
+          path: HeroAssistant.apk
 
-      - name: Criar Release no GitHub
+      - name: Criar Release
         if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         uses: softprops/action-gh-release@v2
         with:
@@ -80,7 +61,7 @@ jobs:
             ### Requisitos
             - Android 8.0 (API 26) ou superior
             - Shizuku instalado para recursos avançados
-          files: app/build/outputs/apk/debug/app-debug.apk
+          files: HeroAssistant.apk
           draft: false
           prerelease: false
         env:
