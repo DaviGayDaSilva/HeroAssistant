@@ -9,7 +9,7 @@ on:
 
 jobs:
   build:
-    name: Compilar APK
+    name: Compilar e Lançar Release
     runs-on: ubuntu-latest
 
     steps:
@@ -38,50 +38,43 @@ jobs:
       - name: Compilar APK Release
         run: ./gradlew assembleRelease
 
-      - name: Renomear APKs
-        run: |
-          cp app/build/outputs/apk/debug/app-debug.apk HeroAssistant-debug.apk
-          cp app/build/outputs/apk/release/app-release.apk HeroAssistant-release.apk
-
-      - name: Upload APKs
+      - name: Upload APK Debug
         uses: actions/upload-artifact@v4
         with:
-          name: HeroAssistant-APKs
-          path: |
-            HeroAssistant-debug.apk
-            HeroAssistant-release.apk
+          name: HeroAssistant-Debug
+          path: app/build/outputs/apk/debug/app-debug.apk
 
-  release:
-    name: Criar Release no GitHub
-    needs: build
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Download dos APKs
-        uses: actions/download-artifact@v4
+      - name: Upload APK Release
+        uses: actions/upload-artifact@v4
         with:
-          name: HeroAssistant-APKs
+          name: HeroAssistant-Release
+          path: app/build/outputs/apk/release/app-release-unsigned.apk
 
-      - name: Criar Release
+      - name: Criar Release no GitHub
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         uses: softprops/action-gh-release@v1
         with:
           tag_name: v1.0.${{ github.run_number }}
           name: HeroAssistant v1.0.${{ github.run_number }}
           body: |
-            ## HeroAssistant
+            ## 🚀 HeroAssistant
             
             Build automático gerado pelo GitHub Actions.
             
-            - **Debug**: versão de desenvolvimento
-            - **Release**: versão de produção (não assinada)
+            ### 📱 APKs Disponíveis
+            - **HeroAssistant-Debug**: versão de desenvolvimento
+            - **HeroAssistant-Release**: versão de produção
             
-            ### Requisitos
-            - Android 8.0+
-            - Shizuku (opcional, para recursos avançados)
+            ### ⚙️ Requisitos
+            - Android 8.0 (API 26) ou superior
+            - Shizuku instalado para recursos avançados
+            
+            ### 📝 Notas
+            - Release não assinada (instalar via ADB ou permitir fontes desconhecidas)
+            - Debug assinada com chave de desenvolvimento
           files: |
-            HeroAssistant-debug.apk
-            HeroAssistant-release.apk
+            app/build/outputs/apk/debug/app-debug.apk
+            app/build/outputs/apk/release/app-release-unsigned.apk
           draft: false
           prerelease: false
         env:
