@@ -38,13 +38,28 @@ jobs:
       - name: Compilar APK Debug
         run: ./gradlew assembleDebug --stacktrace
 
-      - name: Verificar APK gerado
-        run: |
-          echo "=== Procurando APKs ==="
-          find . -name "*.apk" -type f
-
       - name: Upload APK Debug
         uses: actions/upload-artifact@v4
         with:
           name: HeroAssistant-Debug
           path: app/build/outputs/apk/debug/app-debug.apk
+
+      - name: Criar Release no GitHub
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: v1.0.${{ github.run_number }}
+          name: HeroAssistant v1.0.${{ github.run_number }}
+          body: |
+            ## HeroAssistant
+
+            Build automático gerado pelo GitHub Actions.
+
+            ### Requisitos
+            - Android 8.0 (API 26) ou superior
+            - Shizuku instalado para recursos avançados
+          files: app/build/outputs/apk/debug/app-debug.apk
+          draft: false
+          prerelease: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
