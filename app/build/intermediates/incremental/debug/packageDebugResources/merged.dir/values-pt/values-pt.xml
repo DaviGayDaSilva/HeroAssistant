@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">HeroAssistant</string>
+    <string name="battery">Bateria</string>
+    <string name="clean_cache">Limpar Cache</string>
+    <string name="clean_failed">Falha ao limpar o cache.</string>
+    <string name="clean_success">Cache limpo com sucesso!</string>
+    <string name="cleaning">Limpando…</string>
+    <string name="daily">diária</string>
+    <string name="dashboard_title">Painel</string>
+    <string name="data_usage">Dados Móveis</string>
+    <string name="enable_auto_clean">Ativar limpeza automática</string>
+    <string name="estimated_cache">Cache estimado: %s</string>
+    <string name="frequency">Frequência</string>
+    <string name="heavy_apps_title">Apps Pesados Encontrados</string>
+    <string name="no_bloatware">Nenhum bloatware detectado.</string>
+    <string name="remove">Remover</string>
+    <string name="remove_bloatware">Remover Bloatware</string>
+    <string name="reports">Relatórios</string>
+    <string name="scan_now">Escanear Dispositivo</string>
+    <string name="scanning">Escaneando…</string>
+    <string name="schedule_clean">Agendar Limpeza</string>
+    <string name="shizuku_active">Shizuku Ativo</string>
+    <string name="shizuku_inactive">Shizuku Inativo</string>
+    <string name="storage">Armazenamento</string>
+    <string name="weekly">semanal</string>
+</resources>
