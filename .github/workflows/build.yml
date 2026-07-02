@@ -32,11 +32,32 @@ jobs:
           build-tools: '34.0.0'
           target: '34'
 
+      - name: Criar gradle.properties (se ausente)
+        run: |
+          if [ ! -f gradle.properties ]; then
+            echo "android.useAndroidX=true" > gradle.properties
+            echo "android.enableJetifier=true" >> gradle.properties
+            echo "org.gradle.jvmargs=-Xmx2048m" >> gradle.properties
+            echo "gradle.properties criado."
+          else
+            echo "gradle.properties já existe."
+          fi
+
       - name: Dar permissão ao Gradle Wrapper
         run: chmod +x gradlew
 
       - name: Compilar APK Debug
         run: ./gradlew assembleDebug --stacktrace
+
+      - name: Verificar se o APK foi gerado
+        run: |
+          if [ -f app/build/outputs/apk/debug/app-debug.apk ]; then
+            echo "APK gerado com sucesso."
+            ls -l app/build/outputs/apk/debug/app-debug.apk
+          else
+            echo "ERRO: APK não encontrado!"
+            exit 1
+          fi
 
       - name: Upload APK Debug
         uses: actions/upload-artifact@v4
