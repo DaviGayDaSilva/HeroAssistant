@@ -13,7 +13,7 @@ permissions:
 jobs:
   build:
     name: Compilar e Lançar Release
-    runs-on: ubuntu-latest
+    runs-on: debian-latest
 
     steps:
       - name: Checkout do código
@@ -32,15 +32,12 @@ jobs:
           build-tools: '34.0.0'
           target: '34'
 
-      - name: Criar gradle.properties (se ausente)
+      - name: Criar gradle.properties
         run: |
           if [ ! -f gradle.properties ]; then
             echo "android.useAndroidX=true" > gradle.properties
             echo "android.enableJetifier=true" >> gradle.properties
-            echo "org.gradle.jvmargs=-Xmx2048m" >> gradle.properties
-            echo "gradle.properties criado."
-          else
-            echo "gradle.properties já existe."
+            echo "org.gradle.jvmargs=-Xmx2048m -Dfile.encoding=UTF-8" >> gradle.properties
           fi
 
       - name: Dar permissão ao Gradle Wrapper
@@ -49,13 +46,13 @@ jobs:
       - name: Compilar APK Debug
         run: ./gradlew assembleDebug --stacktrace
 
-      - name: Verificar se o APK foi gerado
+      - name: Verificar APK
         run: |
           if [ -f app/build/outputs/apk/debug/app-debug.apk ]; then
             echo "APK gerado com sucesso."
-            ls -l app/build/outputs/apk/debug/app-debug.apk
           else
-            echo "ERRO: APK não encontrado!"
+            echo "APK não encontrado, verificando diretório:"
+            find . -name "*.apk" -type f
             exit 1
           fi
 
@@ -72,11 +69,14 @@ jobs:
           tag_name: v1.0.${{ github.run_number }}
           name: HeroAssistant v1.0.${{ github.run_number }}
           body: |
-            ## HeroAssistant
+            ## 🚀 HeroAssistant
 
             Build automático gerado pelo GitHub Actions.
 
-            ### Requisitos
+            ### 📱 APK
+            - **HeroAssistant-Debug**: versão de desenvolvimento
+
+            ### ⚙️ Requisitos
             - Android 8.0 (API 26) ou superior
             - Shizuku instalado para recursos avançados
           files: app/build/outputs/apk/debug/app-debug.apk
