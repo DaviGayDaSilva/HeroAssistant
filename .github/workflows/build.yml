@@ -13,7 +13,7 @@ permissions:
 jobs:
   build:
     name: Compilar e Lançar Release
-    runs-on: debian-latest
+    runs-on: ubuntu-latest  # Única linha alterada
 
     steps:
       - name: Checkout do código
